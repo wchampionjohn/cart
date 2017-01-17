@@ -13,3 +13,14 @@
  *= require_tree .
  *= require_self
  */
+
+@import "bootstrap-sprockets";
+@import "bootstrap";
+
+.btn-toolbar {
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+.ui-helper-center {
+    text-align: center;
+}

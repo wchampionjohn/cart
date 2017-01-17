@@ -1,0 +1,117 @@
+<div class="container" ng-controller="indexCtrl" ng-init="page = <%= params['page'] || 1 %>; statuses = <%= @statuses.to_json %>">
+  <h1>Products</h1>
+  <hr />
+  <div class="row">
+    <div class="table-responsive col-md-12">
+      <div class="btn-toolbar">
+        <div class="pull-left btn-group btn-group-sm">
+          <%= link_to(new_product_path, class: 'btn btn-default btn-xs') do %>
+          <i class="glyphicon glyphicon glyphicon-plus"></i>
+          <% end %>
+        </div>
+        <div class="pull-right btn-group btn-group-sm">
+          <button class="btn btn-default" type="buttton" name="refresh" title"Refresh" ng-click="refresh()">
+            <i class="glyphicon glyphicon-refresh icon-refresh"></i>
+          </button>
+          <button class="btn btn-default btn-xs" type="buttton"
+            ng-if="!isEditMode"
+            ng-click="changeToEditMode()"
+            ng-disabled="selectedProductIds.length == 0">
+            <i class="glyphicon glyphicon-pencil"></i>
+          </button>
+          <button class="btn btn-default btn-xs" type="buttton" ng-if="isEditMode" ng-click="saveBatchEdit()">
+            <i class="glyphicon glyphicon-floppy-disk" alt="確認修改"></i>
+          </button>
+          <button class="btn btn-default btn-xs" type="buttton" ng-if="isEditMode" ng-click="cancelEdit()">
+            <i class="glyphicon glyphicon-floppy-remove" alt="取消修改"></i>
+          </button>
+          <button class="btn btn-default btn-xs" type="buttton"
+            ng-if="!isEditMode"
+            ng-click="batchDelete()"
+            ng-disabled="selectedProductIds.length == 0">
+            <i class="glyphicon glyphicon glyphicon-trash" alt="刪除"></i>
+          </button>
+        </div>
+
+        <div class="pull-right search">
+          <input id="keyword" class="form-control input-sm" type="text" placeholder="Search" ng-model="keyword" ng-keypress="search($event)">
+        </div>
+      </div>
+
+      <table class="grid table table-bordered table-sortable" ng-controller="tableCtrl">
+        <thead>
+          <tr>
+            <th class="ui-helper-center">
+              <input type="checkbox" ng-click="checkAll()" ng-model="selectAll" ng-disabled="isEditMode">
+            </th>
+            <th ng-if="!isEditMode"></th>
+            <th>#</th>
+            <th>Name<span ng-if="isEditMode">*</span></th>
+            <th>Description</th>
+            <th>Price<span ng-if="isEditMode">*</span></th>
+            <th>Status<span ng-if="isEditMode">*</span></th>
+            <th>Calculate<span ng-if="isEditMode">*</span></th>
+            <th ng-if="!isEditMode">Created at</th>
+            <th ng-if="!isEditMode">Updated at</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr ng-repeat="product in products" ng-controller="itemCtrl">
+            <td class="ui-helper-center">
+              <input type="checkbox" ng-checked="selectedProductIds.indexOf(product.id) > -1"
+              ng-click="toggleProductsSelection(product.id)"
+              ng-disabled="isEditMode">
+            </td>
+            <td class="ui-helper-center" ng-if="!isEditMode">
+              <button class="btn btn-default btn-xs" type="buttton" ng-click="locationEdit(product.id)">
+                <i class="glyphicon glyphicon-pencil"></i>
+              </button>
+              <button class="btn btn-default btn-xs" type="buttton" ng-click="delete(product.id)">
+                <i class="glyphicon glyphicon glyphicon-trash"></i>
+              </button>
+            </td>
+            <td>
+              {{product.id}}
+            </td>
+            <td>
+              <span ng-if="!isEdit(product.id)" ng-bind-html="hightlight(product.title)"></span>
+              <input type="text" class="form-control input-sm" ng-if="isEdit(product.id)" ng-model="product.title">
+            </td>
+            <td>
+              <span ng-if="!isEdit(product.id)" ng-bind-html="hightlight(product.description)"></span>
+              <input type="text" class="form-control input-sm" ng-if="isEdit(product.id)" ng-model="product.description">
+            </td>
+            <td>
+              <span ng-if="!isEdit(product.id)">{{product.price}}</span>
+              <input type="text" class="form-control input-sm" ng-if="isEdit(product.id)" ng-model="product.price" size="2">
+            </td>
+            <td class="ui-helper-center">
+              <span style="padding:5px"
+                ng-class="statusClass(product.status)"
+                ng-if="!isEdit(product.id)"> {{product.status}} </span>
+              <div class="radio-inline" ng-if="isEdit(product.id)" ng-repeat="(value, status) in statuses">
+                <label>
+                  <input type="radio" ng-model="product.status" ng-value="value"> {{value}}
+                </label>
+              </div>
+            </td>
+            <td>
+              <span ng-if="!isEdit(product.id)">{{product.calculate}}</span>
+              <input type="text" class="form-control input-sm" ng-if="isEdit(product.id)" ng-model="product.calculate" size="2">
+            </td>
+            <td ng-if="!isEditMode">
+              {{product.created_at}}
+            </td>
+            <td ng-if="!isEditMode">
+              {{product.updated_at}}
+            </td>
+          </tr>
+          <tr ng-show="!products.length" >
+            <td align="center" colspan="10">no records</td>
+          </tr>
+        </tbody>
+      </table>
+      <%= paginate current_collection %>
+    </div>
+  </div>
+</div>

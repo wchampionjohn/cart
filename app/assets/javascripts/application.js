@@ -13,7 +13,16 @@
 //= require jquery
 //= require jquery_ujs
 //
-//= require angular
 //= require ngUpload
+//= require angular-ui-bootstrap
 
 //= require_tree .
+
+function findById(source, id) {
+  for (var i = 0; i < source.length; i++) {
+    if (source[i].id === id) {
+      return source[i];
+    }
+  }
+  throw "Couldn't find object with id: " + id;
+}

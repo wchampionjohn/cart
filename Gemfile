@@ -6,7 +6,7 @@ gem 'puma', '~> 3.0'
 gem 'sass-rails', '~> 5.0'
 gem 'uglifier', '>= 1.3.0'
 gem 'jquery-rails'
-gem 'turbolinks', '~> 5'
+#gem 'turbolinks', '~> 5'
 gem 'jbuilder', '~> 2.5'
 
 group :development, :test do
@@ -25,3 +25,8 @@ gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 gem 'simple_form'
 gem 'rails-assets-angular'
 gem 'rails-assets-ngUpload'
+gem 'angular-ui-bootstrap-rails'
+gem 'bootstrap-sass'
+gem 'faker'
+gem 'kaminari'
+gem 'active_model_serializers'
